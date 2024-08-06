@@ -1,8 +1,0 @@
-cloud run para aplicações
-IP externo para acesso as aplicações
-Banco de dados caso necessite para armazenar os itens do backend
-LB para redirecionamento e comunicação de front e back.
-
-Terraform
-Cloud run
-
