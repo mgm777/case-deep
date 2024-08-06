@@ -5,4 +5,4 @@ steps:
     args: ['push', 'gcr.io/$PROJECT_ID/deep-front:latest']
 
 images:
-  - 'gcr.io/$PROJECT_ID/frontend-app:latest'
+  - 'gcr.io/$PROJECT_ID/deep-front:latest'
