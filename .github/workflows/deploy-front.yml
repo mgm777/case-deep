@@ -1,4 +1,4 @@
-name: Build and Deploy to GCR and Cloud Run
+name: Build and Deploy to Artifact Registry and Cloud Run
 
 on:
   push:
@@ -23,25 +23,29 @@ jobs:
       with:
         credentials_json: ${{ secrets.GCP_SA }}
 
+    - name: Configure Docker to use Google Artifact Registry
+      run: |
+        gcloud auth configure-docker us-east1-docker.pkg.dev
+
     - name: Build Docker image
       run: |
-        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest -f frontend/Dockerfile frontend
-        docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend:latest -f backend/Dockerfile backend
+        docker build -t us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/frontend:latest -f frontend/Dockerfile frontend
+        docker build -t us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/backend:latest -f backend/Dockerfile backend
 
-    - name: Push Docker images to GCR
+    - name: Push Docker images to Artifact Registry
       run: |
-        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest
-        docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend:latest
+        docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/frontend:latest
+        docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/backend:latest
 
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy frontend \
-          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest \
-          --region us-central1 \
+          --image us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/frontend:latest \
+          --region us-east1 \
           --platform managed \
           --allow-unauthenticated
         gcloud run deploy backend \
-          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend:latest \
-          --region us-central1 \
+          --image us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-repo/backend:latest \
+          --region us-east1 \
           --platform managed \
           --allow-unauthenticated
