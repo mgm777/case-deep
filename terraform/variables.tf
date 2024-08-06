@@ -1,7 +1,7 @@
 variable "project" {
     description = "Nome do projeto utilizado no recurso"
     type = string
-    default = "case-project"
+    default = "case-deep0001"
 }
 
 variable "region" {
@@ -14,4 +14,10 @@ variable "location_bucket" {
   description = "value"
   type = string
   default = "us-east1"
+}
+
+variable "name_bucket" {
+  description = "Nome do bucket usado para armazenar o estado do Terraform"
+  type = string
+  default = "terraform-deep"
 }
