@@ -17,10 +17,11 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
       with:
         version: 'latest'
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
 
     - name: Authenticate to Google Cloud
-      run: echo "${{ secrets.GCP_SA }}" | gcloud auth activate-service-account --key-file=-
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: ${{ secrets.GCP_SA }}
 
     - name: Build Docker image
       run: |
@@ -36,11 +37,11 @@ jobs:
       run: |
         gcloud run deploy frontend \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/frontend:latest \
-          --region us-east1 \
+          --region us-central1 \
           --platform managed \
           --allow-unauthenticated
         gcloud run deploy backend \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/backend:latest \
-          --region us-east1 \
+          --region us-central1 \
           --platform managed \
           --allow-unauthenticated
