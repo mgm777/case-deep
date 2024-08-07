@@ -56,6 +56,20 @@ variable "back_repo_name" {
   
 }
 
+variable "container_name_front" {
+  description = "Nome do container gerado no cloud Run"
+  type = string
+  default = "front_svc"
+  
+}
+
+variable "container_name_back" {
+  description = "Nome do container gerado no Cloud Run"
+  type = string
+  default = "back_svc"
+  
+}
+
 variable "apply_cloud_run" {
   description = "Flag to apply Cloud Run resources"
   type        = bool
