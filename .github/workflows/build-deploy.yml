@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
@@ -18,7 +18,7 @@ jobs:
         version: 'latest'
 
     - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v1
+      uses: google-github-actions/auth@v2
       with:
         credentials_json: ${{ secrets.GCP_SA }}
 
@@ -36,10 +36,10 @@ jobs:
     needs: setup-gcs
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v2
+      uses: hashicorp/setup-terraform@v3
       with:
         terraform_version: 1.5.0  # Especifique a versão do Terraform que deseja usar
 
@@ -63,7 +63,7 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
@@ -71,9 +71,9 @@ jobs:
         version: 'latest'
 
     - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v1
+      uses: google-github-actions/auth@v2
       with:
-        credentials_json: ${{ secrets.GCP_SA }}
+        credentials_json: ${{ secrets.gA }}
 
     - name: Configure Docker to use Google Artifact Registry
       run: |
