@@ -1,4 +1,4 @@
-# Subindo a infraestrutura de uma aplicação no GCP
+# Subindo a infraestrutura de uma aplicação no GCP com Terraform
 
 Este repositório contém o código de um pequeno app de lista de tarefas. As instruções para rodar essa aplicação utilizando Docker seguem abaixo. O teste em si está no último item desse README, mas recomendamos que tente rodar a aplicação localmente antes seguindo os passos abaixo.
 
@@ -32,8 +32,8 @@ https://github.com/mgm777/case-deep.git
 ---
 
 ### 2º Execute o comando para criar o bucket:
- - O bucket será criado na região us-east1
- - será habilitado o versionamento no mesmo
+ - O bucket será criado na região us-east1.
+ - Será habilitado o versionamento no bucket afim de melhor gerenciar o state do terraform.
 
 O objetivo de criar o bucket via gsutil e não utilizando o código do Terraform, é para que quando você execute o Terraform consiga já provisionar o state dentro do bucket sem que aja conflito e não seja necessário nenhuma ação manual para criar pelo console do Google Cloud.
 ```
@@ -55,7 +55,7 @@ fi
 
 ```
 terraform/
-├── main.tf - Arquvivo principal onde se encontrar o provider e o armazenamento do state.
+├── main.tf - Arquivo principal onde se encontra o provider e o armazenamento do state.
 ├── artifact.tf - Arquivo terraform referente ao Artifact Registry para onde são enviadas as imagens após o build.
 ├── variables.tf - Arquivo terraform para armazenamento das variáveis de todos os demais arquivos.
 └── cloudrun.tf - Arquivo terraform referente ao serviço de Cloud Run que são os containers onde são hospedados as aplicações.
