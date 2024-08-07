@@ -1,0 +1,140 @@
+name: Automatic Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  APPLY_CLOUD_RUN: ${{ secrets.APPLY_CLOUD_RUN }}
+  SKIP_CLOUD_RUN: ${{ secrets.SKIP_CLOUD_RUN }}
+
+jobs:
+  setup-gcs:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        version: 'latest'
+
+    - name: Verificação se o storage com state do Terraform existe
+      run: |
+        if ! gsutil ls -b gs://deep-infra; then
+          gsutil mb -l us-east1 gs://deep-infra
+          gsutil versioning set on gs://deep-infra
+        else
+          echo "Bucket already exists. Skipping creation."
+        fi
+
+  terraform:
+    runs-on: ubuntu-latest
+    needs: setup-gcs
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.1.7
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        version: 'latest'
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform
+
+    - name: Terraform Plan
+      run: terraform plan -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ env.SKIP_CLOUD_RUN }}"
+      working-directory: ./terraform
+
+    - name: Terraform Apply
+      run: terraform apply -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ env.SKIP_CLOUD_RUN }}" -auto-approve
+      working-directory: ./terraform
+      env:
+        credentials_json: ${{ secrets.GCP_SA }}
+
+  build:
+    runs-on: ubuntu-latest
+    needs: terraform
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA }}    
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        version: 'latest'
+
+    - name: Configure Docker to use Google Artifact Registry
+      run: |
+        gcloud auth configure-docker us-east1-docker.pkg.dev
+
+    - name: Build Docker images
+      run: |
+        docker build -t us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-front/frontend:latest -f frontend/Dockerfile frontend
+        docker build -t us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-back/backend:latest -f backend/Dockerfile backend
+
+    - name: Push Docker images to Artifact Registry
+      run: |
+        docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-front/frontend:latest
+        docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-back/backend:latest
+
+  terraform-deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.1.7
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        version: 'latest'
+
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ./terraform
+
+    - name: Terraform Plan
+      run: terraform plan -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ env.APPLY_CLOUD_RUN }}"
+      working-directory: ./terraform
+
+    - name: Terraform Apply
+      run: terraform apply -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ env.APPLY_CLOUD_RUN }}" -auto-approve
+      working-directory: ./terraform
+      env:
+        credentials_json: ${{ secrets.GCP_SA }}
