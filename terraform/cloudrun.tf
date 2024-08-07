@@ -8,9 +8,6 @@ resource "google_cloud_run_v2_service" "frontend" {
     containers {
       image = var.image_front
       name = var.container_name_front
-      ports {
-        container_port = 3000
-      }
       resources {
         limits = {
           cpu    = "1"
