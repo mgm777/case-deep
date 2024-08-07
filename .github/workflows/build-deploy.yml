@@ -71,7 +71,7 @@ jobs:
       env:
         credentials_json: ${{ secrets.GCP_SA }}
 
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     needs: terraform
     steps:
@@ -102,26 +102,9 @@ jobs:
         docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-front/frontend:latest
         docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-back/backend:latest
 
-    - name: Deploy to Cloud Run Frontend
-      run: |
-        gcloud run deploy frontend \
-          --image us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-front/frontend:latest \
-          --region us-east1 \
-          --platform managed \
-          --allow-unauthenticated
-    
-    - name: Deploy to Cloud Run Backend
-      run: |
-        gcloud run deploy backend \
-          --image us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-back/backend:latest \
-          --region us-east1 \
-          --platform managed \
-          --allow-unauthenticated
-
   terraform-deploy:
     runs-on: ubuntu-latest
-    needs: build-and-deploy
-    
+    needs: build
     
     steps:
     - name: Checkout code
