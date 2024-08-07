@@ -68,7 +68,7 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ env.SKIP_CLOUD_RUN }}" -auto-approve
       working-directory: ./terraform
-      with:
+      env:
         credentials_json: ${{ secrets.GCP_SA }}
 
   build-and-deploy:
@@ -145,7 +145,7 @@ jobs:
     - name: env step
       run: echo "A variavel é aplicada aqui"
       env:
-        SKIP_CLOUD_RUN: ${{ secrets.SKIP_CLOUD_RUN }}
+        APPLY_CLOUD_RUN: ${{ secrets.APPLY_CLOUD_RUN }}
 
     - name: Terraform Init
       run: terraform init
@@ -158,5 +158,5 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ env.APPLY_CLOUD_RUN }}" -auto-approve
       working-directory: ./terraform
-      with:
+      env:
         credentials_json: ${{ secrets.GCP_SA }}
