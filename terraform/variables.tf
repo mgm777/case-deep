@@ -59,14 +59,13 @@ variable "back_repo_name" {
 variable "container_name_front" {
   description = "Nome do container gerado no cloud Run"
   type = string
-  default = "front_svc"
+  default = "front-svc"
   
 }
-
 variable "container_name_back" {
   description = "Nome do container gerado no Cloud Run"
   type = string
-  default = "back_svc"
+  default = "back-svc"
   
 }
 
