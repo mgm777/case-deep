@@ -68,8 +68,8 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ env.SKIP_CLOUD_RUN }}" -auto-approve
       working-directory: ./terraform
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA }}
+      with:
+        credentials_json: ${{ secrets.GCP_SA }}
 
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -158,5 +158,5 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ env.APPLY_CLOUD_RUN }}" -auto-approve
       working-directory: ./terraform
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA }}
+      with:
+        credentials_json: ${{ secrets.GCP_SA }}
