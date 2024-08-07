@@ -1,4 +1,5 @@
 resource "google_cloud_run_v2_service" "frontend" {
+  count    = var.apply_cloud_run ? 1 : 0
   name     = var.cloudrun_name_front
   location = var.location
   ingress = "INGRESS_TRAFFIC_ALL"
@@ -18,6 +19,7 @@ resource "google_cloud_run_v2_service" "frontend" {
 }
 
 resource "google_cloud_run_v2_service" "backend" {
+  count    = var.apply_cloud_run ? 1 : 0
   name     = var.cloudrun_name_back
   location = var.location
   ingress = "INGRESS_TRAFFIC_ALL"

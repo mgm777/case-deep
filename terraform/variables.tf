@@ -55,3 +55,9 @@ variable "back_repo_name" {
   default = "deep-back"
   
 }
+
+variable "apply_cloud_run" {
+  description = "Flag to apply Cloud Run resources"
+  type        = bool
+  default     = true
+}
