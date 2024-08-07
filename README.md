@@ -25,11 +25,18 @@ A construção da infraestrutura foi estruturada de forma mais automatizada poss
 
 1º Baixe o repositório
 
+```
+https://github.com/mgm777/case-deep.git
+
+```
+
 2º Execute o comando para criar o bucket:
  - O bucket será criado na região us-east1
  - será habilitado o versionamento no mesmo
 
+O objetivo de criar o bucket via gsutil e não utilizando o código do Terraform, é para que quando você execute o Terraform consiga já provisionar o state dentro do bucket sem que aja conflito e não seja necessário nenhuma ação manual para criar pelo console do Google Cloud.
 ```
+
 if ! gsutil ls -b gs://deep-infra; then
   gsutil mb -l us-east1 gs://deep-infra
   gsutil versioning set on gs://deep-infra
@@ -38,9 +45,15 @@ else
   echo "Bucket already exists. Enabling versioning."
   gsutil versioning set on gs://deep-infra
 fi
+
 ```
 
- criar uma conta de serviço no GCP com as seguintes permissões:
+ 
+
+
+### Para utilização do Workflow<a name="Workflow"></a>
+
+Criar uma conta de serviço no GCP com as seguintes permissões:
   - Administrador de objeto do Storage
   - Administrador do Artifact Registry
   - Administrador do Cloud Run
@@ -51,7 +64,14 @@ fi
 
 2º Iremos exportar a chave em formato JSON da conta de serviço pois iremos utilizá-la posteriormente.
 
+3º Para configurar as suas secrets dentro do Github acesse:
 
-### Para utilização do Workflow<a name="Workflow"></a>
 
-Feito o deploy da aplicação, siga as instruções do PDF enviado para execução do teste técnico. Lembrando que apenas a primeira atividade é obrigatória.
+
+
+```
+https://github.com/<seu-user>/<seu-repo>/settings/actions
+
+```
+
+
