@@ -1,4 +1,4 @@
-variable "project" {
+variable "project_id" {
   description = "Nome do projeto utilizado no recurso"
   type        = string
   default     = "case-deep0001"
