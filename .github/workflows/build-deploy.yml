@@ -115,40 +115,40 @@ jobs:
           --platform managed \
           --allow-unauthenticated
 
-    terraform-cloudrun:
-    runs-on: ubuntu-latest
-    needs: build-and-deploy
-    if: ${{ secrets.SKIP_CLOUD_RUN != 'true' }}
+  terraform-deploy:
+      runs-on: ubuntu-latest
+      needs: build-and-deploy
+      if: ${{ secrets.SKIP_CLOUD_RUN != 'true' }}
     
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: 1.1.7
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.1.7
 
-    - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: ${{ secrets.GCP_SA }}
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA }}
 
-    - name: Set up Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-      with:
-        version: 'latest'
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          version: 'latest'
 
-    - name: Terraform Init
-      run: terraform init
-      working-directory: ./terraform
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
 
-    - name: Terraform Plan
-      run: terraform plan -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ secrets.APPLY_CLOUD_RUN }}"
-      working-directory: ./terraform
+      - name: Terraform Plan
+        run: terraform plan -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ secrets.APPLY_CLOUD_RUN }}"
+        working-directory: ./terraform
 
-    - name: Terraform Apply
-      run: terraform apply -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ secrets.APPLY_CLOUD_RUN }}" -auto-approve
-      working-directory: ./terraform
-      env:
-        credentials_json: ${{ secrets.GCP_SA }}
+      - name: Terraform Apply
+        run: terraform apply -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -var="apply_cloud_run=${{ secrets.APPLY_CLOUD_RUN }}" -auto-approve
+        working-directory: ./terraform
+        env:
+          credentials_json: ${{ secrets.GCP_SA }}
