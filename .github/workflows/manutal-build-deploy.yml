@@ -1,9 +1,20 @@
-name: Build, Deploy, e Terraform Workflow
+name: Manual Workflow
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Choose the environment to deploy'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
 
 env:
   APPLY_CLOUD_RUN: ${{ secrets.APPLY_CLOUD_RUN }}
@@ -78,15 +89,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA }}    
+
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
       with:
         version: 'latest'
-
-    - name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v2
-      with:
-        credentials_json: ${{ secrets.GCP_SA }}
 
     - name: Configure Docker to use Google Artifact Registry
       run: |
@@ -124,11 +135,6 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
       with:
         version: 'latest'
-
-    - name: env step
-      run: echo "A variavel é aplicada aqui"
-      env:
-        APPLY_CLOUD_RUN: ${{ secrets.APPLY_CLOUD_RUN }}
 
     - name: Terraform Init
       run: terraform init
