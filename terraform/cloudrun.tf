@@ -20,8 +20,8 @@ resource "google_cloud_run_v2_service" "frontend" {
 }
 
 resource "google_cloud_run_service_iam_member" "_cloudrun" {
-  service  = google_cloud_run_service.default.name
-  location = google_cloud_run_service.default.location
+  service  = google_cloud_run_service.frontend.name
+  location = google_cloud_run_service.frontend.location
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
