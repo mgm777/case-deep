@@ -19,6 +19,13 @@ resource "google_cloud_run_v2_service" "frontend" {
   depends_on = [ google_artifact_registry_repository.front_repo_image ]
 }
 
+resource "google_cloud_run_service_iam_member" "_cloudrun" {
+  service  = google_cloud_run_service.default.name
+  location = google_cloud_run_service.default.location
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
+
 resource "google_cloud_run_v2_service" "backend" {
   count    = var.apply_cloud_run ? 1 : 0
   name     = var.cloudrun_name_back
