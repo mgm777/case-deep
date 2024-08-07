@@ -19,7 +19,7 @@ Este repositório contém o código de um pequeno app de lista de tarefas. As in
 
 ### Introdução<a name="introduction"></a>
 
-A construção da infraestrutura foi estruturada de forma mais automatizada possível utilizando o Terraform e o Workflow do Github Actions.
+A construção da infraestrutura foi estruturada de forma mais automatizada possível utilizando o Terraform, cloud CLI e o Workflow do Github Actions.
 
 ### Passo a passo<a name="step-by-step"></a>
 
@@ -29,6 +29,7 @@ A construção da infraestrutura foi estruturada de forma mais automatizada poss
 https://github.com/mgm777/case-deep.git
 
 ```
+---
 
 2º Execute o comando para criar o bucket:
  - O bucket será criado na região us-east1
@@ -47,8 +48,21 @@ else
 fi
 
 ```
+---
+3º Execução do terraform
 
+
+ - Acesse a pasta do terraform 
+ ```
+ case-deep>terraform
+ ```
+ - Execute primeiramente o comando <b> ```terraform init``` </b> para iniciar o terraform e baixar as dependências do projeto.
+ - Em seguida o execute o comando <b> ```terraform plan``` </b> para verificar a consistência dos arquivos e o que será contruído.
+ - O último passo será a execução do comando <b> ```terraform apply``` </b>para aplicar o código e começar a ser orquestrado a construção da infraestrutura.
+
+ ---
  
+##
 
 
 ### Para utilização do Workflow<a name="Workflow"></a>
