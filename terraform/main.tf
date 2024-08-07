@@ -6,7 +6,7 @@ provider "google" {
 terraform {
   backend "gcs" {
     bucket = "deep-infra"
-    prefix = "terraform/state/prd"
-    
+    prefix = "terraform/state"
+
   }
 }
