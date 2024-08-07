@@ -20,7 +20,7 @@ jobs:
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v1
       with:
-        credentials_json: ${{ secrets.GCP_SA_KEY }}
+        credentials_json: ${{ secrets.GCP_SA }}
 
     - name: Verificação se o storage com state do Terraform existe
       run: |
@@ -55,7 +55,7 @@ jobs:
       run: terraform apply -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -auto-approve
       working-directory: ./terraform
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA }}
 
   build-and-deploy:
     runs-on: ubuntu-latest
