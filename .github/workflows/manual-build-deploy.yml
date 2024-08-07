@@ -1,13 +1,10 @@
 name: Manual Workflow
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Choose the environment to deploy'
+        description: 'Escolha o ambiente para o deploy'
         required: true
         default: 'production'
         type: choice

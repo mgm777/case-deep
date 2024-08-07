@@ -1,5 +1,4 @@
 resource "google_cloud_run_v2_service" "frontend" {
-  count    = var.apply_cloud_run ? 1 : 0
   name     = var.cloudrun_name_front
   location = var.location
   ingress = "INGRESS_TRAFFIC_ALL"
@@ -20,14 +19,13 @@ resource "google_cloud_run_v2_service" "frontend" {
 }
 
 resource "google_cloud_run_service_iam_member" "_cloudrun" {
-  service  = google_cloud_run_service.frontend.name
-  location = google_cloud_run_service.frontend.location
+  service  = google_cloud_run_v2_service.frontend.name
+  location = google_cloud_run_v2_service.frontend.location
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
 
 resource "google_cloud_run_v2_service" "backend" {
-  count    = var.apply_cloud_run ? 1 : 0
   name     = var.cloudrun_name_back
   location = var.location
   ingress = "INGRESS_TRAFFIC_ALL"
