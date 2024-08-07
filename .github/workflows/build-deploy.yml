@@ -64,7 +64,7 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -var="project_id=${{ secrets.GCP_PROJECT_ID }}" -var="region=us-east1" -auto-approve
       working-directory: ./terraform
-      with:
+      env:
         credentials_json: ${{ secrets.GCP_SA }}
 
   build-and-deploy:
