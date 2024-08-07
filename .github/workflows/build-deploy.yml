@@ -103,7 +103,6 @@ jobs:
         docker push us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-back/backend:latest
 
     - name: Deploy to Cloud Run Frontend
-      if: ${{ env.SKIP_CLOUD_RUN == 'false' }}
       run: |
         gcloud run deploy frontend \
           --image us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-front/frontend:latest \
@@ -112,7 +111,6 @@ jobs:
           --allow-unauthenticated
     
     - name: Deploy to Cloud Run Backend
-      if: ${{ env.SKIP_CLOUD_RUN == 'false' }}
       run: |
         gcloud run deploy backend \
           --image us-east1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/deep-back/backend:latest \
