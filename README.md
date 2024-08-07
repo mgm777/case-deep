@@ -1,12 +1,12 @@
-## Subindo a infraestrutura de uma aplicação no GCP
+# Subindo a infraestrutura de uma aplicação no GCP
 
 Este repositório contém o código de um pequeno app de lista de tarefas. As instruções para rodar essa aplicação utilizando Docker seguem abaixo. O teste em si está no último item desse README, mas recomendamos que tente rodar a aplicação localmente antes seguindo os passos abaixo.
 
 <!--ts-->
   * [Pré-requisitos](#prerequisites)
   * [Introdução](#introduction)
-  * [Passo-a-passo](#step-by-step)
-  * [Workflow](#Workflow)
+  * [Passo-a-passo Terraform](#step-by-step)
+  * [Passo a passo Workflow](#Workflow)
 <!--te-->
 
 ### Pré-requisitos<a name="prerequisites"></a>
@@ -21,9 +21,9 @@ Este repositório contém o código de um pequeno app de lista de tarefas. As in
 
 A construção da infraestrutura foi estruturada de forma mais automatizada possível utilizando o Terraform, cloud CLI e o Workflow do Github Actions.
 
-### Passo a passo<a name="step-by-step"></a>
+## Passo a passo para subir a infraestrutura utilizando o Terraform <a name="step-by-step"></a>
 
-1º Baixe o repositório
+### 1º Baixe o repositório
 
 ```
 https://github.com/mgm777/case-deep.git
@@ -31,7 +31,7 @@ https://github.com/mgm777/case-deep.git
 ```
 ---
 
-2º Execute o comando para criar o bucket:
+### 2º Execute o comando para criar o bucket:
  - O bucket será criado na região us-east1
  - será habilitado o versionamento no mesmo
 
@@ -49,8 +49,17 @@ fi
 
 ```
 ---
-3º Execução do terraform
+### 3º Execução do terraform
 
+## Estrutura de pastas e arquivos do terraform
+
+```
+terraform/
+├── main.tf - Arquvivo principal onde se encontrar o provider e o armazenamento do state.
+├── artifact.tf - Arquivo terraform referente ao Artifact Registry para onde são enviadas as imagens após o build.
+├── variables.tf - Arquivo terraform para armazenamento das variáveis de todos os demais arquivos.
+└── cloudrun.tf - Arquivo terraform referente ao serviço de Cloud Run que são os containers onde são hospedados as aplicações.
+```
 
  - Acesse a pasta do terraform 
  ```
