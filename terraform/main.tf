@@ -3,8 +3,10 @@ provider "google" {
   region  = var.region
 }
 
-resource "google_storage_bucket" "terraform_state" {
-  project  = var.project
-  location = var.location_bucket
-  name     = var.name_bucket_terraform
+terraform {
+  backend "gcs" {
+    bucket = "deep-infra"
+    prefix = "terraform/state/prd"
+    
+  }
 }

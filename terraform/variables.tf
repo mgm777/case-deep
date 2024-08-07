@@ -10,14 +10,48 @@ variable "region" {
   default     = "us-east1"
 }
 
-variable "location_bucket" {
+variable "location" {
   description = "value"
   type        = string
   default     = "us-east1"
 }
 
-variable "name_bucket_terraform" {
-  description = "Nome do bucket usado para armazenar o estado do Terraform"
-  type        = string
-  default     = "terraform-deep"
+variable "cloudrun_name_front" {
+  description = "Nome do Cloudrun responsável pelo Frontend"
+  type = string
+  default = "run-front"
+  
+}
+
+variable "image_front" {
+  description = "Caminho da imagem do Frontend"
+  type = string
+  default = "us-east1-docker.pkg.dev/case-deep0001/deep-front/frontend"
+}
+
+variable "cloudrun_name_back" {
+  description = "Nome do Cloudrun responsável pelo Backend"
+  type = string
+  default = "run-back"
+  
+}
+
+variable "image_back" {
+  description = "Caminho da imagem do Backend"
+  type = string
+  default = "us-east1-docker.pkg.dev/case-deep0001/deep-back/backend"
+}
+
+variable "front_repo_name" {
+  description = "Nome do repositório de imagens do frontend"
+  type = string
+  default = "deep-front"
+  
+}
+
+variable "back_repo_name" {
+  description = "Nome do repositório de imagens do backend"
+  type = string
+  default = "deep-back"
+  
 }
