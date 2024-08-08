@@ -70,10 +70,18 @@ terraform/
 ├── variables.tf - Arquivo terraform para armazenamento das variáveis de todos os demais arquivos.
 └── cloudrun.tf - Arquivo terraform referente ao serviço de Cloud Run que são os containers onde são hospedados as aplicações.
 ```
- ---
- 
-##
 
+ ## Diagrama de execução do Terraform 
+
+```mermaid
+graph TD;
+    A[terraform init] -->|iniciando o terraform e dependências | B[terraform plan]
+    B -->|Verificando a consistência dos arquivos
+    Exibindo o planejamento da criação da infraestrutura| C[terraform apply]
+    C -->|Aplicando a criação da infraestrutura| D[Infraestrutura Construída]
+
+
+```
 
 ### Para utilização do Workflow<a name="Workflow"></a>
 
