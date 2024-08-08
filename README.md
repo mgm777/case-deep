@@ -51,6 +51,16 @@ fi
 ---
 ### 3º Execução do terraform
 
+- Acesse a pasta do terraform 
+ ```
+ case-deep>terraform
+ ```
+ - Execute primeiramente o comando <b> ```terraform init``` </b> para iniciar o terraform e baixar as dependências do projeto.
+ - Em seguida o execute o comando <b> ```terraform plan``` </b> para verificar a consistência dos arquivos e exibir o que será contruído.
+ - O último passo será a execução do comando <b> ```terraform apply``` </b>para aplicar o código e começar a ser orquestrado a construção da infraestrutura.
+
+---
+
 ## Estrutura de pastas e arquivos do terraform
 
 ```
@@ -60,15 +70,6 @@ terraform/
 ├── variables.tf - Arquivo terraform para armazenamento das variáveis de todos os demais arquivos.
 └── cloudrun.tf - Arquivo terraform referente ao serviço de Cloud Run que são os containers onde são hospedados as aplicações.
 ```
-
- - Acesse a pasta do terraform 
- ```
- case-deep>terraform
- ```
- - Execute primeiramente o comando <b> ```terraform init``` </b> para iniciar o terraform e baixar as dependências do projeto.
- - Em seguida o execute o comando <b> ```terraform plan``` </b> para verificar a consistência dos arquivos e o que será contruído.
- - O último passo será a execução do comando <b> ```terraform apply``` </b>para aplicar o código e começar a ser orquestrado a construção da infraestrutura.
-
  ---
  
 ##
@@ -82,8 +83,6 @@ Criar uma conta de serviço no GCP com as seguintes permissões:
   - Administrador do Cloud Run
   - Administrador do Storage
   - Editor
-
-  *Não utilizei tanto o princípio de granularidade para aplicação das roles
 
 2º Iremos exportar a chave em formato JSON da conta de serviço pois iremos utilizá-la posteriormente.
 
